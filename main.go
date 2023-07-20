@@ -8,8 +8,8 @@ import (
 )
 
 type NameSize struct {
-	name string
-	size float64
+	Name string
+	Size float64
 }
 
 func ArrayCreation(rootPath string) ([]NameSize, error) {
