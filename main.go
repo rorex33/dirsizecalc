@@ -7,14 +7,14 @@ import (
 	"path/filepath"
 )
 
-type nameSize struct {
+type NameSize struct {
 	name string
 	size float64
 }
 
-func ArrayCreation(rootPath string) ([]nameSize, error) {
+func ArrayCreation(rootPath string) ([]NameSize, error) {
 	//Срез структур с полями "имя" "размер" (для хранения имени и размера папок)
-	var nameSizeArray []nameSize
+	var nameSizeArray []NameSize
 
 	//Проходим по всем файлам указанной директории.
 	dirs, err := ioutil.ReadDir(rootPath)
@@ -35,7 +35,7 @@ func ArrayCreation(rootPath string) ([]nameSize, error) {
 		dirSize := <-c
 		dirSizeMb := dirSize / (1024 * 1024)
 		//Создаём переменную типа nameSize и добавления в срез nameSizeArray (размер папки переводится в мегабайты!)
-		nameSizeValue := nameSize{dir.Name(), dirSizeMb}
+		nameSizeValue := NameSize{dir.Name(), dirSizeMb}
 		nameSizeArray = append(nameSizeArray, nameSizeValue)
 
 		//Обработка возможной ошибки при вовзращении в родительскую директорию
