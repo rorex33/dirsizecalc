@@ -13,7 +13,7 @@ type NameSize struct {
 }
 
 // Создаст и вернёт срез структур NameSize. Каждый элемент среза будет содержать в себе название папки корневой директории и её размер.
-func ArrayCreation(rootPath string) ([]NameSize, error) {
+func GetDirectories(rootPath string) ([]NameSize, error) {
 	//Создаём срез nameSizeArray (для хранения имени и размера папок)
 	var nameSizeArray []NameSize
 
