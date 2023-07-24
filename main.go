@@ -35,8 +35,8 @@ func GetDirectories(rootPath string) ([]NameSize, []NameSize, error) {
 			//Если файл не является директорией, то заносим его имя и размер в отдельный массив filesNameSizeArray
 			file := dir
 			fileSizeMb := float64(file.Size() / (1024 * 1024))
-			nameSizeValue := NameSize{file.Name(), fileSizeMb}
-			filesNameSizeArray = append(filesNameSizeArray, nameSizeValue)
+			fileNameSizeValue := NameSize{file.Name(), fileSizeMb}
+			filesNameSizeArray = append(filesNameSizeArray, fileNameSizeValue)
 		}
 		//Вычисляем размер найденной директории
 		c := make(chan float64) //Создаём канал, в который будут передаваться размеры найденных директорий
@@ -46,8 +46,8 @@ func GetDirectories(rootPath string) ([]NameSize, []NameSize, error) {
 		dirSizeMb := dirSize / (1024 * 1024)
 
 		//Создаём переменную типа nameSize и добавления в nameSizeArray
-		nameSizeValue := NameSize{dir.Name(), dirSizeMb}
-		nameSizeArray = append(nameSizeArray, nameSizeValue)
+		dirNameSizeValue := NameSize{dir.Name(), dirSizeMb}
+		nameSizeArray = append(nameSizeArray, dirNameSizeValue)
 
 		//Обработка возможной ошибки при возвращении в родительскую директорию
 		err = os.Chdir("..")
