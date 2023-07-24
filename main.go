@@ -12,23 +12,31 @@ type NameSize struct {
 	Size float64
 }
 
-// Создаст и вернёт срез структур NameSize. Каждый элемент среза будет содержать в себе название папки корневой директории и её размер.
-func GetDirectories(rootPath string) ([]NameSize, error) {
+// Создаст и вернёт два среза структур NameSize. Элементы срезов содержат в себе название файла корневой директории и его размер.
+// Первый срез содержит в себе поддиректории корневой директории, а второй - файлы корневой директории.
+func GetDirectories(rootPath string) ([]NameSize, []NameSize, error) {
 	//Создаём срез nameSizeArray (для хранения имени и размера папок)
 	var nameSizeArray []NameSize
+
+	//Создаём срез nameSizeArray (для хранения имени и размера файлов)
+	var filesNameSizeArray []NameSize
 
 	//Проходим по всем файлам корневой директории.
 	dirs, err := ioutil.ReadDir(rootPath)
 	if err != nil {
 		fmt.Println("Ошибка при чтении файлов ROOT директории:", err)
-		return nameSizeArray, err
+		return nameSizeArray, filesNameSizeArray, err
 	}
 
 	//Если очередной файл оказывается директорией, то запускается вычисление её размера
 	//Размер и имя папки заносятся в ранее созданный nameSizeArray
 	for _, dir := range dirs {
 		if !dir.IsDir() {
-			continue
+			//Если файл не является директорией, то заносим его имя и размер в отдельный массив filesNameSizeArray
+			file := dir
+			fileSizeMb := float64(file.Size() / (1024 * 1024))
+			nameSizeValue := NameSize{file.Name(), fileSizeMb}
+			filesNameSizeArray = append(filesNameSizeArray, nameSizeValue)
 		}
 		//Вычисляем размер найденной директории
 		c := make(chan float64) //Создаём канал, в который будут передаваться размеры найденных директорий
@@ -45,11 +53,11 @@ func GetDirectories(rootPath string) ([]NameSize, error) {
 		err = os.Chdir("..")
 		if err != nil {
 			fmt.Println("..")
-			return nameSizeArray, err
+			return nameSizeArray, filesNameSizeArray, err
 		}
 	}
 
-	return nameSizeArray, nil
+	return nameSizeArray, filesNameSizeArray, nil
 }
 
 // Вычисление размера директории с учётом вложенности в неё других директорий. Применяется многопоточное вычисление. Результат отправляется в заданный канал.
