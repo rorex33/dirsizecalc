@@ -5,11 +5,45 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 type NameSize struct {
 	Name string
 	Size float64
+}
+
+// Класс ASC сортировки
+type BySizeASC []NameSize
+
+func (a BySizeASC) Len() int           { return len(a) }
+func (a BySizeASC) Less(i, j int) bool { return a[i].Size < a[j].Size }
+func (a BySizeASC) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
+// Класс DESC сортировки
+type BySizeDESC []NameSize
+
+func (a BySizeDESC) Len() int           { return len(a) }
+func (a BySizeDESC) Less(i, j int) bool { return a[i].Size > a[j].Size }
+func (a BySizeDESC) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
+// sortType == "asc" - сортировка по возрастанию. Любое другое значение - сортировка по убыванию.
+func Sorting(dirsOutPutArray []NameSize, filesOutPutArray []NameSize, sortType string) ([]NameSize, []NameSize) {
+	//Сортировка папок
+	if sortType == "asc" {
+		sort.Sort(BySizeASC(dirsOutPutArray))
+	} else {
+		sort.Sort(BySizeDESC(dirsOutPutArray))
+	}
+
+	//Сортировка файлов
+	if sortType == "asc" {
+		sort.Sort(BySizeASC(filesOutPutArray))
+	} else {
+		sort.Sort(BySizeDESC(filesOutPutArray))
+	}
+
+	return dirsOutPutArray, filesOutPutArray
 }
 
 // Создаст и вернёт два среза структур NameSize. Элементы срезов содержат в себе название файла корневой директории и его размер.
