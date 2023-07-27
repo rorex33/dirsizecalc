@@ -48,7 +48,7 @@ func Sorting(dirsOutPutArray []NameSize, filesOutPutArray []NameSize, sortType s
 
 // Создаст и вернёт два среза структур NameSize. Элементы срезов содержат в себе название файла корневой директории и его размер.
 // Первый срез содержит в себе поддиректории корневой директории, а второй - файлы корневой директории.
-func GetDirectories(rootPath string) ([]NameSize, []NameSize, error) {
+func GetContent(rootPath string) ([]NameSize, []NameSize, error) {
 	//Создаём срез nameSizeArray (для хранения имени и размера папок)
 	var nameSizeArray []NameSize
 
